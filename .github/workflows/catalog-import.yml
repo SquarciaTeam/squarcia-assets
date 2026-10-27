@@ -1,0 +1,57 @@
+name: catalog-import
+
+on:
+  workflow_dispatch:
+    inputs:
+      game:
+        description: Gioco da aggiornare
+        type: choice
+        options: [fab]
+        default: fab
+  # Controllo settimanale di nuove espansioni (lunedì alle 05:00 UTC).
+  schedule:
+    - cron: "0 5 * * 1"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: catalog-import
+  cancel-in-progress: false
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    defaults:
+      run:
+        working-directory: tools/catalog-import
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: tools/catalog-import/package-lock.json
+
+      - run: npm ci
+      # Sempre l'ultima versione dei dati FaB: è così che arrivano le nuove espansioni.
+      - run: npm install --no-save @flesh-and-blood/cards@latest @flesh-and-blood/types@latest
+      - run: npm test
+
+      - name: Import
+        run: node src/main.ts --game ${{ inputs.game || 'fab' }}
+
+      - name: Pubblica le modifiche
+        working-directory: .
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add catalog images tools/catalog-import/state
+          if git diff --cached --quiet; then
+            echo "Nessuna novità da pubblicare."
+          else
+            git commit -m "Catalogo ${{ inputs.game || 'fab' }} aggiornato ($(jq -r '.games["${{ inputs.game || 'fab' }}"].source' catalog/manifest.json))"
+            git push
+          fi
