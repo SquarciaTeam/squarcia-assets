@@ -1,4 +1,21 @@
 {
   "schemaVersion": 1,
-  "games": {}
+  "games": {
+    "fab": {
+      "version": "7.1.8",
+      "source": "@flesh-and-blood/cards@7.1.8",
+      "publishedAt": "2026-10-27T15:26:38.697Z",
+      "cardCount": 5231,
+      "printingCount": 17503,
+      "imageCount": 12207,
+      "missingImageCount": 8,
+      "catalog": "catalog/fab/index.json",
+      "aliases": "catalog/fab/image-aliases.json",
+      "images": "images/fab/",
+      "changelog": {
+        "addedCardCount": 0,
+        "addedCards": []
+      }
+    }
+  }
 }
