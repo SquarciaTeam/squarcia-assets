@@ -1,8 +1,9 @@
 // Import del catalogo carte. Uso:
-//   node src/main.ts --game fab|pokemon [--limit 100] [--skip-images]
+//   node src/main.ts --game fab|pokemon|cyberpunk [--limit 100] [--skip-images]
 // Variabili d'ambiente: IMAGE_SOURCE (template con {key}, solo giochi con immagini copiate), CONCURRENCY.
 import { join } from "node:path";
 import { parseArgs } from "node:util";
+import { buildCyberpunk } from "./cyberpunk.ts";
 import { buildFab } from "./fab.ts";
 import { fileWriter, httpDownloader, loadState, saveState, syncImages, webpTransform } from "./images.ts";
 import { buildPokemon } from "./pokemon.ts";
@@ -17,7 +18,7 @@ interface GameBuild {
   version: string;
   images: ImageUrls;
   /** Presente solo se le immagini vanno copiate nel repo (servite da GitHub Pages). */
-  mirror?: { keys: string[]; urlFor(key: string): string };
+  mirror?: { keys: string[]; urlFor(key: string): string | Promise<string> };
 }
 
 /** Immagini copiate in images/<game>/ e servite da GitHub Pages. */
@@ -35,6 +36,11 @@ const GAMES: Record<string, () => Promise<GameBuild>> = {
       images: mirrored("fab"),
       mirror: { keys: fab.imageKeys, urlFor: (key) => template.replace("{key}", encodeURIComponent(key)) },
     };
+  },
+  async cyberpunk() {
+    const cyberpunk = await buildCyberpunk();
+    // Immagini copiate subito: gli URL firmati della sorgente scadono dopo pochi minuti.
+    return { ...cyberpunk, images: mirrored("cyberpunk"), mirror: { keys: cyberpunk.imageKeys, urlFor: cyberpunk.urlFor } };
   },
   async pokemon() {
     const pokemon = await buildPokemon({

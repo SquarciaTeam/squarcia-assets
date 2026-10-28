@@ -103,12 +103,13 @@ export async function syncImages(keys: readonly string[], state: ImageState, dep
 
 const USER_AGENT = "squarcia-assets-import (+https://github.com/SquarciaTeam/squarcia-assets)";
 
-export function httpDownloader(urlFor: (key: string) => string, retries = 3) {
+/** `urlFor` può essere asincrono: es. URL firmati da rinnovare prima del download (Cyberpunk). */
+export function httpDownloader(urlFor: (key: string) => string | Promise<string>, retries = 3) {
   return async (key: string): Promise<Uint8Array | null> => {
     let lastError: unknown;
     for (let attempt = 0; attempt < retries; attempt++) {
       try {
-        const res = await fetch(urlFor(key), { headers: { "User-Agent": USER_AGENT } });
+        const res = await fetch(await urlFor(key), { headers: { "User-Agent": USER_AGENT } });
         if (res.status === 404 || res.status === 403) return null;
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         return new Uint8Array(await res.arrayBuffer());

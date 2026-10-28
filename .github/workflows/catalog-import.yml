@@ -6,7 +6,7 @@ on:
       game:
         description: Gioco da aggiornare
         type: choice
-        options: [fab, pokemon]
+        options: [fab, pokemon, cyberpunk]
         default: fab
   # Controllo settimanale di nuove espansioni (lunedì alle 05:00 UTC).
   schedule:
@@ -28,7 +28,7 @@ jobs:
       max-parallel: 1
       fail-fast: false
       matrix:
-        game: ${{ github.event_name == 'schedule' && fromJSON('["fab","pokemon"]') || fromJSON(format('["{0}"]', inputs.game)) }}
+        game: ${{ github.event_name == 'schedule' && fromJSON('["fab","pokemon","cyberpunk"]') || fromJSON(format('["{0}"]', inputs.game)) }}
     defaults:
       run:
         working-directory: tools/catalog-import

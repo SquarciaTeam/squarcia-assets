@@ -36,6 +36,24 @@
         "addedCardCount": 0,
         "addedCards": []
       }
+    },
+    "cyberpunk": {
+      "version": "2026-10-28",
+      "source": "NetDeck (galleria ufficiale Cyberpunk TCG)",
+      "publishedAt": "2026-10-28T12:08:08.559Z",
+      "cardCount": 151,
+      "printingCount": 756,
+      "imageCount": 756,
+      "missingImageCount": 0,
+      "catalog": "catalog/cyberpunk/index.json",
+      "aliases": "catalog/cyberpunk/image-aliases.json",
+      "images": "images/cyberpunk/",
+      "imageUrl": "https://squarciateam.github.io/squarcia-assets/images/cyberpunk/{key}.webp",
+      "thumbUrl": "https://squarciateam.github.io/squarcia-assets/images/cyberpunk/{key}.webp",
+      "changelog": {
+        "addedCardCount": 0,
+        "addedCards": []
+      }
     }
   }
 }
