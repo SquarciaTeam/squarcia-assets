@@ -5,7 +5,7 @@ import { join } from "node:path";
 import { parseArgs } from "node:util";
 import { buildCyberpunk } from "./cyberpunk.ts";
 import { buildFab } from "./fab.ts";
-import { fileWriter, httpDownloader, loadState, saveState, syncImages, webpTransform } from "./images.ts";
+import { fileWriter, generateThumbs, httpDownloader, loadState, saveState, syncImages, webpTransform } from "./images.ts";
 import { buildPokemon } from "./pokemon.ts";
 import { publish, type CardLike, type ImageUrls } from "./publish.ts";
 
@@ -21,10 +21,9 @@ interface GameBuild {
   mirror?: { keys: string[]; urlFor(key: string): string | Promise<string> };
 }
 
-/** Immagini copiate in images/<game>/ e servite da GitHub Pages. */
+/** Immagini copiate in images/<game>/ (e miniature in images/<game>/thumbs/) servite da GitHub Pages. */
 function mirrored(game: string): ImageUrls {
-  const url = `${PAGES_BASE}/images/${game}/{key}.webp`;
-  return { imageUrl: url, thumbUrl: url };
+  return { imageUrl: `${PAGES_BASE}/images/${game}/{key}.webp`, thumbUrl: `${PAGES_BASE}/images/${game}/thumbs/{key}.webp` };
 }
 
 const GAMES: Record<string, () => Promise<GameBuild>> = {
@@ -101,6 +100,13 @@ if (catalog.mirror && !values["skip-images"]) {
   );
   for (const f of result.failed.slice(0, 20)) console.log(`  errore ${f.key}: ${f.error}`);
   await saveState(statePath, state);
+}
+
+if (catalog.mirror) {
+  const thumbs = await generateThumbs(join(ROOT, `images/${game}`), Object.keys(state.files), {
+    concurrency: Number(process.env.CONCURRENCY ?? 6),
+  });
+  console.log(`[${game}] miniature nuove: ${thumbs.length}`);
 }
 
 const withImage = catalog.cards.filter((c) => c.defaultImage).length;

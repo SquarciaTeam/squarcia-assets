@@ -4,7 +4,7 @@
     "fab": {
       "version": "7.1.8",
       "source": "@flesh-and-blood/cards@7.1.8",
-      "publishedAt": "2026-10-28T11:33:56.726Z",
+      "publishedAt": "2026-10-28T13:33:34.611Z",
       "cardCount": 5231,
       "printingCount": 17503,
       "imageCount": 12207,
@@ -13,7 +13,7 @@
       "aliases": "catalog/fab/image-aliases.json",
       "images": "images/fab/",
       "imageUrl": "https://squarciateam.github.io/squarcia-assets/images/fab/{key}.webp",
-      "thumbUrl": "https://squarciateam.github.io/squarcia-assets/images/fab/{key}.webp",
+      "thumbUrl": "https://squarciateam.github.io/squarcia-assets/images/fab/thumbs/{key}.webp",
       "changelog": {
         "addedCardCount": 0,
         "addedCards": []
@@ -40,7 +40,7 @@
     "cyberpunk": {
       "version": "2026-10-28",
       "source": "NetDeck (galleria ufficiale Cyberpunk TCG)",
-      "publishedAt": "2026-10-28T12:08:08.559Z",
+      "publishedAt": "2026-10-28T13:33:47.985Z",
       "cardCount": 151,
       "printingCount": 756,
       "imageCount": 756,
@@ -49,7 +49,7 @@
       "aliases": "catalog/cyberpunk/image-aliases.json",
       "images": "images/cyberpunk/",
       "imageUrl": "https://squarciateam.github.io/squarcia-assets/images/cyberpunk/{key}.webp",
-      "thumbUrl": "https://squarciateam.github.io/squarcia-assets/images/cyberpunk/{key}.webp",
+      "thumbUrl": "https://squarciateam.github.io/squarcia-assets/images/cyberpunk/thumbs/{key}.webp",
       "changelog": {
         "addedCardCount": 0,
         "addedCards": []

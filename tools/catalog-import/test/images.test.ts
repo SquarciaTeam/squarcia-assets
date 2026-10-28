@@ -81,3 +81,23 @@ test("limit riduce il numero di download", async () => {
   await syncImages(["A", "B", "C"], emptyState(), deps, { limit: 2, concurrency: 1 });
   assert.deepEqual(downloads, ["A", "B"]);
 });
+
+test("le miniature si generano solo per le immagini pubblicate e non ancora elaborate", async () => {
+  const { mkdtemp, mkdir: mk, writeFile: wf, readFile: rf } = await import("node:fs/promises");
+  const { tmpdir } = await import("node:os");
+  const { join } = await import("node:path");
+  const { generateThumbs } = await import("../src/images.ts");
+  const dir = await mkdtemp(join(tmpdir(), "thumbs-"));
+  await wf(join(dir, "A.webp"), "img-a");
+  await wf(join(dir, "B.webp"), "img-b");
+  await mk(join(dir, "thumbs"), { recursive: true });
+  await wf(join(dir, "thumbs", "B.webp"), "gia-fatta");
+  const transform = async (source: Uint8Array) => new TextEncoder().encode(`thumb:${new TextDecoder().decode(source)}`);
+
+  const created = await generateThumbs(dir, ["A", "B", "C"], { transform });
+
+  assert.deepEqual(created, ["A"], "B esiste già, C non ha l'immagine");
+  assert.equal(await rf(join(dir, "thumbs", "A.webp"), "utf8"), "thumb:img-a");
+  assert.equal(await rf(join(dir, "thumbs", "B.webp"), "utf8"), "gia-fatta");
+  assert.deepEqual(await generateThumbs(dir, ["A", "B"], { transform }), [], "secondo run: niente da fare");
+});

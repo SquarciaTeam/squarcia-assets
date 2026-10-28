@@ -1,7 +1,7 @@
 // Sincronizza le immagini delle carte: scarica solo le chiavi mancanti, elimina i duplicati (stesso contenuto,
 // chiave diversa) registrandoli come alias, ridimensiona e salva in webp.
 import { createHash } from "node:crypto";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { access, mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 
 export interface ImageState {
@@ -148,4 +148,49 @@ export async function saveState(path: string, state: ImageState): Promise<void> 
   await mkdir(dirname(path), { recursive: true });
   const sorted = (o: Record<string, string>) => Object.fromEntries(Object.entries(o).sort(([a], [b]) => a.localeCompare(b)));
   await writeFile(path, JSON.stringify({ files: sorted(state.files), aliases: sorted(state.aliases), missing: state.missing }, null, 1) + "\n");
+}
+
+/** Larghezza delle miniature (liste e ricerca): circa 7 KB a carta. */
+export const THUMB_WIDTH = 160;
+
+export async function webpThumb(source: Uint8Array): Promise<Uint8Array> {
+  const { default: sharp } = await import("sharp");
+  return sharp(source).resize({ width: THUMB_WIDTH, withoutEnlargement: true }).webp({ quality: 70, effort: 5 }).toBuffer();
+}
+
+async function exists(path: string): Promise<boolean> {
+  return access(path).then(
+    () => true,
+    () => false
+  );
+}
+
+/**
+ * Crea le miniature mancanti (<dir>/thumbs/<key>.webp) dalle immagini già pubblicate in <dir>/<key>.webp.
+ * Incrementale: le miniature esistenti non vengono rigenerate. Restituisce le chiavi elaborate.
+ */
+export async function generateThumbs(
+  dir: string,
+  keys: readonly string[],
+  options: { transform?: (source: Uint8Array) => Promise<Uint8Array>; concurrency?: number } = {}
+): Promise<string[]> {
+  const transform = options.transform ?? webpThumb;
+  const created: string[] = [];
+  const todo: string[] = [];
+  for (const key of keys) {
+    if (!(await exists(join(dir, "thumbs", `${key}.webp`))) && (await exists(join(dir, `${key}.webp`)))) todo.push(key);
+  }
+  let next = 0;
+  async function worker() {
+    while (next < todo.length) {
+      const key = todo[next++];
+      const thumb = await transform(await readFile(join(dir, `${key}.webp`)));
+      const path = join(dir, "thumbs", `${key}.webp`);
+      await mkdir(dirname(path), { recursive: true });
+      await writeFile(path, thumb);
+      created.push(key);
+    }
+  }
+  await Promise.all(Array.from({ length: options.concurrency ?? 6 }, worker));
+  return created;
 }
