@@ -4,7 +4,7 @@
     "fab": {
       "version": "7.1.8",
       "source": "@flesh-and-blood/cards@7.1.8",
-      "publishedAt": "2026-10-27T15:26:38.697Z",
+      "publishedAt": "2026-10-28T11:33:56.726Z",
       "cardCount": 5231,
       "printingCount": 17503,
       "imageCount": 12207,
@@ -12,6 +12,26 @@
       "catalog": "catalog/fab/index.json",
       "aliases": "catalog/fab/image-aliases.json",
       "images": "images/fab/",
+      "imageUrl": "https://squarciateam.github.io/squarcia-assets/images/fab/{key}.webp",
+      "thumbUrl": "https://squarciateam.github.io/squarcia-assets/images/fab/{key}.webp",
+      "changelog": {
+        "addedCardCount": 0,
+        "addedCards": []
+      }
+    },
+    "pokemon": {
+      "version": "2026-10-28",
+      "source": "TCGdex (api.tcgdex.net)",
+      "publishedAt": "2026-10-28T11:38:31.961Z",
+      "cardCount": 21290,
+      "printingCount": 30820,
+      "imageCount": 19669,
+      "missingImageCount": 1621,
+      "catalog": "catalog/pokemon/index.json",
+      "aliases": "catalog/pokemon/image-aliases.json",
+      "images": "images/pokemon/",
+      "imageUrl": "https://assets.tcgdex.net/{key}/high.webp",
+      "thumbUrl": "https://assets.tcgdex.net/{key}/low.webp",
       "changelog": {
         "addedCardCount": 0,
         "addedCards": []

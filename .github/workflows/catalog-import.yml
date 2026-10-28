@@ -6,7 +6,7 @@ on:
       game:
         description: Gioco da aggiornare
         type: choice
-        options: [fab]
+        options: [fab, pokemon]
         default: fab
   # Controllo settimanale di nuove espansioni (lunedì alle 05:00 UTC).
   schedule:
@@ -22,12 +22,21 @@ concurrency:
 jobs:
   import:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 180
+    strategy:
+      # Un gioco alla volta: ogni job aggiorna catalog/manifest.json.
+      max-parallel: 1
+      fail-fast: false
+      matrix:
+        game: ${{ github.event_name == 'schedule' && fromJSON('["fab","pokemon"]') || fromJSON(format('["{0}"]', inputs.game)) }}
     defaults:
       run:
         working-directory: tools/catalog-import
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Sempre l'ultimo main: il job precedente della matrice potrebbe aver appena pubblicato.
+          ref: main
 
       - uses: actions/setup-node@v4
         with:
@@ -37,11 +46,12 @@ jobs:
 
       - run: npm ci
       # Sempre l'ultima versione dei dati FaB: è così che arrivano le nuove espansioni.
-      - run: npm install --no-save @flesh-and-blood/cards@latest @flesh-and-blood/types@latest
+      - if: matrix.game == 'fab'
+        run: npm install --no-save @flesh-and-blood/cards@latest @flesh-and-blood/types@latest
       - run: npm test
 
       - name: Import
-        run: node src/main.ts --game ${{ inputs.game || 'fab' }}
+        run: node src/main.ts --game ${{ matrix.game }}
 
       - name: Pubblica le modifiche
         working-directory: .
@@ -52,6 +62,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "Nessuna novità da pubblicare."
           else
-            git commit -m "Catalogo ${{ inputs.game || 'fab' }} aggiornato ($(jq -r '.games["${{ inputs.game || 'fab' }}"].source' catalog/manifest.json))"
+            git commit -m "Catalogo ${{ matrix.game }} aggiornato ($(jq -r '.games["${{ matrix.game }}"].source' catalog/manifest.json))"
             git push
           fi

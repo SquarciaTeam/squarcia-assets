@@ -13,17 +13,29 @@ export interface ManifestEntry {
   catalog: string;
   aliases: string;
   images: string;
+  /** Template assoluti con `{key}`: immagine grande e miniatura (per Pokémon servite da TCGdex). */
+  imageUrl: string;
+  thumbUrl: string;
   changelog: { addedCardCount: number; addedCards: string[] };
 }
+
+export interface ImageUrls {
+  imageUrl: string;
+  thumbUrl: string;
+}
+
+/** Sotto questa frazione del catalogo precedente si considera la sorgente guasta e non si pubblica. */
+export const MIN_CARD_RATIO = 0.9;
 
 export interface Manifest {
   schemaVersion: 1;
   games: Record<string, ManifestEntry>;
 }
 
-interface CardLike {
+export interface CardLike {
   cardIdentifier: string;
   name: string;
+  defaultImage?: string;
   printings: unknown[];
 }
 
@@ -49,11 +61,25 @@ export function addedCards(previous: readonly CardLike[], next: readonly CardLik
 export async function publish(
   root: string,
   game: string,
-  data: { version: string; source: string; cards: CardLike[]; aliases: Record<string, string>; imageCount: number; missingImageCount: number }
+  data: {
+    version: string;
+    source: string;
+    cards: CardLike[];
+    aliases: Record<string, string>;
+    images: ImageUrls;
+    imageCount: number;
+    missingImageCount: number;
+  }
 ): Promise<ManifestEntry> {
   const catalogPath = `catalog/${game}/index.json`;
   const aliasesPath = `catalog/${game}/image-aliases.json`;
   const previous = await readJson<{ cards: CardLike[] }>(join(root, catalogPath), { cards: [] });
+  if (data.cards.length < previous.cards.length * MIN_CARD_RATIO) {
+    throw new Error(
+      `${game}: ${data.cards.length} carte contro ${previous.cards.length} del catalogo pubblicato. ` +
+        "La sorgente sembra guasta: niente pubblicazione."
+    );
+  }
   const added = previous.cards.length ? addedCards(previous.cards, data.cards) : [];
   const publishedAt = new Date().toISOString();
 
@@ -71,6 +97,8 @@ export async function publish(
     catalog: catalogPath,
     aliases: aliasesPath,
     images: `images/${game}/`,
+    imageUrl: data.images.imageUrl,
+    thumbUrl: data.images.thumbUrl,
     changelog: { addedCardCount: added.length, addedCards: added.slice(0, 50).map((c) => c.name) },
   };
   const manifestPath = join(root, "catalog/manifest.json");
