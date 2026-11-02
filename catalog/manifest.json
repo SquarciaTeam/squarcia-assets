@@ -2,12 +2,12 @@
   "schemaVersion": 1,
   "games": {
     "fab": {
-      "version": "7.1.8",
-      "source": "@flesh-and-blood/cards@7.1.8",
-      "publishedAt": "2026-10-28T13:33:34.611Z",
-      "cardCount": 5231,
-      "printingCount": 17503,
-      "imageCount": 12207,
+      "version": "7.3.6",
+      "source": "@flesh-and-blood/cards@7.3.6",
+      "publishedAt": "2026-11-02T13:06:31.375Z",
+      "cardCount": 5253,
+      "printingCount": 17549,
+      "imageCount": 12245,
       "missingImageCount": 8,
       "catalog": "catalog/fab/index.json",
       "aliases": "catalog/fab/image-aliases.json",
@@ -15,8 +15,31 @@
       "imageUrl": "https://squarciateam.github.io/squarcia-assets/images/fab/{key}.webp",
       "thumbUrl": "https://squarciateam.github.io/squarcia-assets/images/fab/thumbs/{key}.webp",
       "changelog": {
-        "addedCardCount": 0,
-        "addedCards": []
+        "addedCardCount": 22,
+        "addedCards": [
+          "Act on Intel: Whereabouts",
+          "Bribe the Guards",
+          "Concoct Agony",
+          "Continued Coercion",
+          "Escaped Subject",
+          "Eviscerate the Enervated",
+          "Flip the Script",
+          "Isolation Vestment",
+          "Languid Pace",
+          "Painful Choice",
+          "Pick Your Poison",
+          "Plague Mask",
+          "Second Salvos",
+          "Sick Intent",
+          "Sickening Exhaustion",
+          "Sickening Rot",
+          "Sickening Weakness",
+          "Sneaking Rot",
+          "Spike Slasher",
+          "Surgical Gloves",
+          "Viral Sampling",
+          "Wound Extraction"
+        ]
       }
     },
     "pokemon": {
