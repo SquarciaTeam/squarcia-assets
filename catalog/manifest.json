@@ -61,12 +61,12 @@
       }
     },
     "cyberpunk": {
-      "version": "2026-10-28",
+      "version": "2026-11-02",
       "source": "NetDeck (galleria ufficiale Cyberpunk TCG)",
-      "publishedAt": "2026-10-28T13:33:47.985Z",
+      "publishedAt": "2026-11-02T13:08:37.599Z",
       "cardCount": 151,
-      "printingCount": 756,
-      "imageCount": 756,
+      "printingCount": 860,
+      "imageCount": 860,
       "missingImageCount": 0,
       "catalog": "catalog/cyberpunk/index.json",
       "aliases": "catalog/cyberpunk/image-aliases.json",
