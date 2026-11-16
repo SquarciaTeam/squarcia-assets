@@ -46,9 +46,9 @@
       }
     },
     "cyberpunk": {
-      "version": "2026-11-09",
+      "version": "2026-11-16",
       "source": "NetDeck (galleria ufficiale Cyberpunk TCG)",
-      "publishedAt": "2026-11-09T13:39:28.560Z",
+      "publishedAt": "2026-11-16T13:22:57.210Z",
       "cardCount": 152,
       "printingCount": 862,
       "imageCount": 862,
@@ -59,10 +59,8 @@
       "imageUrl": "https://squarciateam.github.io/squarcia-assets/images/cyberpunk/{key}.webp",
       "thumbUrl": "https://squarciateam.github.io/squarcia-assets/images/cyberpunk/thumbs/{key}.webp",
       "changelog": {
-        "addedCardCount": 1,
-        "addedCards": [
-          "Lucyna Kushinada — Fresh Beginnings"
-        ]
+        "addedCardCount": 0,
+        "addedCards": []
       }
     }
   }
