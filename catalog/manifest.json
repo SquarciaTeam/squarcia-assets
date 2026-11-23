@@ -2,12 +2,12 @@
   "schemaVersion": 1,
   "games": {
     "fab": {
-      "version": "7.3.17",
-      "source": "@flesh-and-blood/cards@7.3.17",
-      "publishedAt": "2026-11-16T13:21:44.745Z",
-      "cardCount": 5370,
-      "printingCount": 17822,
-      "imageCount": 12424,
+      "version": "7.3.23",
+      "source": "@flesh-and-blood/cards@7.3.23",
+      "publishedAt": "2026-11-23T15:41:42.751Z",
+      "cardCount": 5371,
+      "printingCount": 17838,
+      "imageCount": 12437,
       "missingImageCount": 11,
       "catalog": "catalog/fab/index.json",
       "aliases": "catalog/fab/image-aliases.json",
@@ -15,15 +15,9 @@
       "imageUrl": "https://squarciateam.github.io/squarcia-assets/images/fab/{key}.webp",
       "thumbUrl": "https://squarciateam.github.io/squarcia-assets/images/fab/thumbs/{key}.webp",
       "changelog": {
-        "addedCardCount": 7,
+        "addedCardCount": 1,
         "addedCards": [
-          "Adaptive Cadaver",
-          "Cut to Shreds",
-          "Death's Door Knocker",
-          "Hemlock Heels",
-          "Morbid Shears",
-          "Skull Candy",
-          "Sugar Casket"
+          "Fury"
         ]
       }
     },
