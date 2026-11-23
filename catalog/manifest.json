@@ -22,9 +22,9 @@
       }
     },
     "pokemon": {
-      "version": "2026-11-16",
+      "version": "2026-11-23",
       "source": "TCGdex (api.tcgdex.net)",
-      "publishedAt": "2026-11-16T13:22:20.110Z",
+      "publishedAt": "2026-11-23T15:42:32.927Z",
       "cardCount": 21432,
       "printingCount": 30962,
       "imageCount": 19669,
